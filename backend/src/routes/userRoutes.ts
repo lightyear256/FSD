@@ -5,5 +5,4 @@ const userRouter = Router();
 
 userRouter.get("/", getAllUsers)
 userRouter.get("/:id", getUserById)
-
 export default userRouter
