@@ -13,17 +13,25 @@ enum Role {
 }
 
 model User {
-  id         String   @id @default(uuid())
-  appwriteId String   @unique 
-  email      String   @unique
-  name       String
-  batch      String?
-  role       Role?     @default(STUDENT)
-  bio        String?
-  linkedin   String?
-  github     String?
-  website    String?
-  profilePic String?
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id             String         @id @default(uuid())
+  appwriteId     String         @unique
+  email          String         @unique
+  name           String
+  batch          String
+  role           Role           @default(STUDENT)
+  bio            String
+  linkedin       String?
+  github         String?
+  website        String?
+  organisation   Organisation?  @relation("organisationrel", fields: [organisationId], references: [id])
+  organisationId String?
+  profilePic     String?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+}
+
+model Organisation {
+  id     String   @id @default(uuid())
+  name   String   @unique
+  users  User[]   @relation("organisationrel")
 }
