@@ -9,8 +9,8 @@ A full-stack web platform that showcases alumni success and builds a stronger br
 **Alumni Connect** is designed to highlight the achievements of alumni and transform their connection with the institute into a lasting, meaningful relationship.  
 
 It’s more than a recognition platform — it’s a **community hub** that enables:  
-- 🎯 Alumni to **mentor, guide, and recruit** students.  
-- 💡 Students to **seek inspiration, mentorship, and career insights**.  
+- 🎯 Alumni to **mentor and guide** students.  
+- 💡 Students to **seek inspiration, and career insights**.  
 - 🏫 The college to **strengthen its legacy** through a vibrant alumni network.  
 
 By fostering these interactions, the platform turns alumni relations into a **powerful and enduring force** within the college ecosystem.  
