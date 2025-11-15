@@ -244,17 +244,17 @@
   font-weight: 700;
   margin: 0;
   font-size: min(5svh, 3em);
-color: white;
--webkit-text-stroke: 0.6px rgba(0, 0, 0, 0.35);
-text-stroke: 0.6px rgba(0, 0, 0, 0.35);
+  color: white;
+  -webkit-text-stroke: 0.6px rgba(0, 0, 0, 0.35);
 
-/* fallback shadow */
-text-shadow:
+  /* fallback shadow */
+  text-shadow:
     -0.5px -0.5px 0 rgba(0, 0, 0, 0.35),
      0.5px -0.5px 0 rgba(0, 0, 0, 0.35),
     -0.5px  0.5px 0 rgba(0, 0, 0, 0.35),
      0.5px  0.5px 0 rgba(0, 0, 0, 0.35);
 }
+
 
 .pc-details p {
   font-weight: 500;

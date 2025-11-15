@@ -1,4 +1,5 @@
 'use client'
+
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/context/AuthContext'
 import Particles from './components/background'
@@ -8,7 +9,7 @@ import CurvedLoop from './components/circular'
 import { AlumniCarousel } from './components/notable'
 
 export default function Home() {
-  const { isAuthenticated, role } = useAuth()
+  const { isAuthenticated } = useAuth()
   const router = useRouter()
 
   useEffect(() => {
@@ -17,76 +18,67 @@ export default function Home() {
     }
   }, [isAuthenticated, router])
 
-  const handleSignUp = () => {
-    router.push('/register')
-  }
-
-  const handleSignIn = () => {
-    router.push('/login')
-  }
-
   return (
     <div className="relative bg-black w-full min-h-screen overflow-x-hidden">
-      <div className="fixed inset-0 w-full h-screen">
+
+      {/* --- Particles Background --- */}
+      <div className="fixed inset-0 h-screen w-full">
         <Particles
           particleColors={['#e0f2fe', '#dbeafe', '#bfdbfe']}
-          particleCount={200}
-          particleSpread={10}
+          particleCount={150}
+          particleSpread={8}
           speed={0.1}
-          particleBaseSize={100}
-          moveParticlesOnHover={true}
+          particleBaseSize={90}
+          moveParticlesOnHover
           alphaParticles={false}
           disableRotation={false}
         />
       </div>
-      
-      <div className=" pt-45 relative z-10 w-full min-h-screen flex flex-col items-center justify-center gap-12 px-4">
-        <div className="text-center space-y-4">
-          <h1 className="text-7xl md:text-9xl font-bold text-white drop-shadow-2xl">
-            Alumni <span className="text-blue-500">Connect</span>
-          </h1>
-          <p className="text-xl md:text-2xl text-white/80 max-w-2xl mx-auto px-4">
-            Bridge the gap between alumni and students. Share knowledge, build connections, and grow together.
-          </p>
-        </div>
+
+      {/* --- HERO SECTION --- */}
+      <div className="relative z-10 w-full min-h-screen flex flex-col items-center justify-center gap-10 px-6 pt-24 text-center">
+        <h1 className="text-6xl sm:text-7xl md:text-8xl font-extrabold text-white drop-shadow-xl leading-tight">
+          Alumni <span className="text-blue-500">Connect</span>
+        </h1>
+
+        <p className="text-lg sm:text-xl md:text-2xl text-white/80 max-w-2xl mx-auto">
+          Bridge the gap between alumni and students. Share knowledge, build connections, and grow together.
+        </p>
 
         {!isAuthenticated && (
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-            <Button 
-              size="lg" 
-              variant="primary"
-              onClick={handleSignUp}
-            >
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-5 mt-4">
+            <Button size="lg" variant="primary" onClick={() => router.push('/register')}>
               Get Started
             </Button>
-            <Button 
-              size="lg" 
-              variant="secondary"
-              onClick={handleSignIn}
-            >
+
+            <Button size="lg" variant="secondary" onClick={() => router.push('/login')}>
               Sign In
             </Button>
           </div>
         )}
-        
+
         <CurvedLoop marqueeText="Welcome to IIIT Dharwad Alumni Network ✦" curveAmount={0} />
       </div>
 
-      <section className="relative z-10 w-full min-h-screen bg-black flex items-center justify-center p-4">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-20 left-1/4 w-96 h-96 bg-blue-600 rounded-full mix-blend-multiply filter blur-3xl opacity-10" />
-          <div className="absolute bottom-20 right-1/4 w-96 h-96 bg-blue-800 rounded-full mix-blend-multiply filter blur-3xl opacity-10" />
+      {/* --- NOTABLE ALUMNI SECTION --- */}
+      <section className="relative z-10 w-full min-h-screen bg-black flex items-center justify-center p-6">
+
+        {/* Subtle background blobs */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <div className="absolute top-24 left-1/4 w-[420px] h-[420px] bg-blue-600/20 rounded-full blur-3xl" />
+          <div className="absolute bottom-24 right-1/4 w-[420px] h-[420px] bg-blue-800/20 rounded-full blur-3xl" />
         </div>
 
-        <div className="relative z-10 w-full max-w-7xl">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-200 mb-4">
+        <div className="relative z-10 w-full max-w-6xl">
+          <div className="text-center mb-14">
+            <h2 className="text-4xl sm:text-5xl font-bold bg-gradient-to-r from-blue-400 to-blue-200 bg-clip-text text-transparent">
               Notable Alumni
             </h2>
-            <p className="text-base md:text-lg text-blue-300/80">
+            <p className="text-base sm:text-lg text-blue-300/80 mt-2">
               Celebrating our exceptional graduates
             </p>
           </div>
+
           <AlumniCarousel />
         </div>
       </section>

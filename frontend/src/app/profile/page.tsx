@@ -1,8 +1,20 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { Mail, User, Lock, BookOpen, Briefcase, Linkedin, Github, Globe, Building2, FileText, Save, AlertCircle, CheckCircle } from 'lucide-react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import {
+  Mail,
+  User,
+  BookOpen,
+  Briefcase,
+  Linkedin,
+  Github,
+  Globe,
+  Building2,
+  FileText,
+  AlertCircle,
+  CheckCircle,
+} from "lucide-react";
+import axios from "axios";
 
 export default function ProfilePage() {
   const [isEditing, setIsEditing] = useState(false);
@@ -10,65 +22,65 @@ export default function ProfilePage() {
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-  const[role,setRole]=useState("STUDENT");
-  useEffect(()=>{
-    setRole(localStorage.getItem('role') as string)
-  },[])
-  const [userType, setUserType] = useState<'STUDENT' | 'ALUMNI'| string>( role ||"STUDENT");
-  const [formData, setFormData] = useState({
-    email: '',
-    name: '',
 
-    batch: '',
-    role: '',
-    linkedin: '',
-    github: '',
-    website: '',
-    organisation: '',
-    bio: '',
+  const [role, setRole] = useState("STUDENT");
+  const [userType, setUserType] = useState<"STUDENT" | "ALUMNI" | string>("STUDENT");
+
+  const [formData, setFormData] = useState({
+    email: "",
+    name: "",
+    batch: "",
+    role: "",
+    linkedin: "",
+    github: "",
+    website: "",
+    organisation: "",
+    bio: "",
   });
+
+  useEffect(() => {
+    const r = localStorage.getItem("role");
+    if (r) setRole(r);
+  }, []);
+
+  useEffect(() => {
+    setUserType(role);
+  }, [role]);
 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
         setIsLoading(true);
-        setError(null);
-        
-        // Get profile data
-        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/user/`, {
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/user/`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
           }
-        });
-        
-        const profileData = response.data;
-        
-        // Set user type based on fetched data
-        if (profileData.userType) {
-          setUserType(profileData.userType);
-        }
-        
-        // Populate form data with fetched data
-        setFormData(prev => ({
-           ...prev,
-  ...profileData,
-  organisation: profileData.organisation?.name || "",
-        }));
-      } catch (err: any) {
-        console.error('Fetch profile error:', err.message);
-        setError('Failed to load profile. Using demo data.');
-        // Set dummy data as fallback
+        );
+
+        const profile = response.data;
+
+        setUserType(profile.userType || userType);
+
         setFormData({
-          email: 'alex.johnson@alumni.edu',
-          name: 'Alex Johnson',
-          
-          batch: '2020',
-          role: 'Alumni',
-          linkedin: 'linkedin.com/in/alexjohnson',
-          github: 'github.com/alexjohnson',
-          website: 'alexjohnson.dev',
-          organisation: 'Tech Innovations Inc.',
-          bio: 'Passionate software engineer dedicated to building innovative solutions.',
+          ...formData,
+          ...profile,
+          organisation: profile.organisation?.name || "",
+        });
+      } catch (err: any) {
+        setError("Failed to load profile.");
+        setFormData({
+          email: "alex.johnson@alumni.edu",
+          name: "Alex Johnson",
+          batch: "2020",
+          role: "Alumni",
+          linkedin: "linkedin.com/in/alexjohnson",
+          github: "github.com/alexjohnson",
+          website: "alexjohnson.dev",
+          organisation: "Tech Innovations",
+          bio: "Passionate engineer.",
         });
       } finally {
         setIsLoading(false);
@@ -78,9 +90,10 @@ export default function ProfilePage() {
     fetchProfile();
   }, []);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSave = async () => {
@@ -89,214 +102,197 @@ export default function ProfilePage() {
       setError(null);
       setSuccess(null);
 
-      // Update profile
-      const response = await axios.put(
+      await axios.put(
         `${process.env.NEXT_PUBLIC_API_URL}/api/user/edit`,
-        {
-          ...formData,
-          userType,
-        },
+        { ...formData, userType },
         {
           headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
-            'Content-Type': 'application/json'
-          }
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         }
       );
 
-      console.log('Profile updated:', response.data);
-      setSuccess('Profile updated successfully!');
+      setSuccess("Profile updated successfully!");
       setIsEditing(false);
-
-      // Clear success message after 3 seconds
-      setTimeout(() => setSuccess(null), 3000);
-    } catch (err: any) {
-      console.error('Save profile error:', err.message);
-      setError('Failed to save profile. Please try again.');
+      setTimeout(() => setSuccess(null), 2500);
+    } catch (err) {
+      setError("Failed to save changes.");
     } finally {
       setIsSaving(false);
     }
   };
 
   const basicFields = [
-    { label: 'Email Address', name: 'email', icon: Mail, type: 'email' },
-    { label: 'Full Name', name: 'name', icon: User, type: 'text' },
-    { label: 'Batch', name: 'batch', icon: BookOpen, type: 'text' },
-    { label: 'Role', name: 'role', icon: Briefcase, type: 'text' },
+    { label: "Email", name: "email", icon: Mail },
+    { label: "Full Name", name: "name", icon: User },
+    { label: "Batch", name: "batch", icon: BookOpen },
+    { label: "Role", name: "role", icon: Briefcase },
   ];
 
-  const socialFields = [
-    { label: 'LinkedIn', name: 'linkedin', icon: Linkedin, type: 'text' },
-    { label: 'GitHub', name: 'github', icon: Github, type: 'text' },
-    { label: 'Personal Website', name: 'website', icon: Globe, type: 'text' },
-    { label: 'Organisation', name: 'organisation', icon: Building2, type: 'text' },
+  const professionalFields = [
+    { label: "LinkedIn", name: "linkedin", icon: Linkedin },
+    { label: "GitHub", name: "github", icon: Github },
+    { label: "Website", name: "website", icon: Globe },
+    { label: "Organisation", name: "organisation", icon: Building2 },
   ];
 
   if (isLoading) {
     return (
-      <main className="min-h-screen bg-gradient-to-br from-black via-slate-950 to-black text-white flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-12 h-12 border-4 border-purple-600/30 border-t-purple-500 rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-purple-300">Loading profile...</p>
-        </div>
+      <main className="min-h-screen flex items-center justify-center bg-black">
+        <div className="animate-spin w-12 h-12 border-4 border-purple-600/30 border-t-purple-500 rounded-full" />
       </main>
     );
   }
 
   return (
-    <main className=" pt-25 min-h-screen bg-gradient-to-br from-black via-slate-950 to-black text-white">
-      <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-40 right-20 w-96 h-96 bg-purple-600/20 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-40 left-20 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl" />
+    <main className="pt-24 min-h-screen bg-gradient-to-br from-black via-slate-950 to-black text-white">
+      <div className="fixed inset-0 pointer-events-none">
+        <div className="absolute top-28 right-32 w-96 h-96 bg-purple-600/20 blur-3xl rounded-full" />
+        <div className="absolute bottom-28 left-32 w-80 h-80 bg-purple-500/10 blur-3xl rounded-full" />
       </div>
 
-      <div className="relative z-10">
-        
-        <div className="max-w-5xl mx-auto px-6 py-16 space-y-8">
-          {error && (
-            <div className="flex items-center gap-3 px-4 py-3 bg-red-900/30 border border-red-700/50 rounded-lg">
-              <AlertCircle className="w-5 h-5 text-red-400" />
-              <p className="text-red-200">{error}</p>
-            </div>
-          )}
+      <div className="relative max-w-5xl mx-auto px-6 py-12 space-y-10">
 
-          {success && (
-            <div className="flex items-center gap-3 px-4 py-3 bg-green-900/30 border border-green-700/50 rounded-lg">
-              <CheckCircle className="w-5 h-5 text-green-400" />
-              <p className="text-green-200">{success}</p>
-            </div>
-          )}
+        {/* Error */}
+        {error && (
+          <div className="flex items-center gap-3 p-4 bg-red-900/30 border border-red-700/40 rounded-lg">
+            <AlertCircle className="w-5 h-5 text-red-400" />
+            <p className="text-red-200">{error}</p>
+          </div>
+        )}
 
-          {/* Basic Information Section */}
-          <div className="bg-gradient-to-br from-purple-900/30 to-black border border-purple-800/40 rounded-2xl p-8 shadow-xl shadow-purple-900/10">
-            <div className="flex items-center justify-between mb-8">
-              <h3 className="text-2xl font-bold text-white">Account Information</h3>
-              <button
-                onClick={() => {
-                  setIsEditing(!isEditing)
-                }}
-                disabled={isSaving}
-                className={`px-6 py-2 rounded-lg font-semibold transition-all duration-300 flex items-center gap-2 disabled:opacity-50 ${
-                  !isEditing &&
-                     'bg-purple-600/80 hover:bg-purple-600 text-white'
-                }`}
-              >
-                {!isEditing && (
-                  'Edit'
-                )}
-              </button>
-            </div>
+        {/* Success */}
+        {success && (
+          <div className="flex items-center gap-3 p-4 bg-green-900/30 border border-green-700/40 rounded-lg">
+            <CheckCircle className="w-5 h-5 text-green-400" />
+            <p className="text-green-200">{success}</p>
+          </div>
+        )}
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {basicFields.filter(Boolean).map((field) => {
-                const IconComponent = field.icon;
+        {/* BASIC INFO */}
+        <section className="bg-black/40 border border-purple-800/30 rounded-2xl p-8 shadow-lg shadow-purple-900/10">
+          <div className="flex justify-between items-center mb-8">
+            <h3 className="text-2xl font-bold">Account Information</h3>
+
+            <button
+              onClick={() => setIsEditing(!isEditing)}
+              className="px-5 py-2 bg-purple-600/80 hover:bg-purple-600 rounded-lg font-semibold transition-all"
+            >
+              {isEditing ? "Cancel" : "Edit"}
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {basicFields.map((field) => {
+              const Icon = field.icon;
+              const value = formData[field.name as keyof typeof formData];
+
+              return (
+                <div key={field.name} className="space-y-2">
+                  <label className="flex items-center gap-2 text-sm font-semibold text-purple-300">
+                    <Icon className="w-4 h-4" />
+                    {field.label}
+                  </label>
+
+                  {isEditing ? (
+                    <input
+                      type="text"
+                      name={field.name}
+                      value={value}
+                      readOnly={field.name === "role"}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 bg-black/40 border border-purple-700/50 rounded-lg"
+                    />
+                  ) : (
+                    <div className="w-full px-4 py-3 bg-black/30 border border-purple-700/30 rounded-lg text-white/80">
+                      {value || "—"}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* ALUMNI ONLY SECTION */}
+        {userType === "ALUMNI" && (
+          <section className="bg-black/40 border border-purple-800/30 rounded-2xl p-8 shadow-lg shadow-purple-900/10">
+            <h3 className="text-2xl font-bold mb-8">Professional Information</h3>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              {professionalFields.map((field) => {
+                const Icon = field.icon;
+                const value = formData[field.name as keyof typeof formData];
+
                 return (
                   <div key={field.name} className="space-y-2">
-                    <label className="flex items-center gap-2 text-sm font-semibold text-purple-300 uppercase tracking-wider">
-                      <IconComponent className="w-4 h-4" />
+                    <label className="flex items-center gap-2 text-sm font-semibold text-purple-300">
+                      <Icon className="w-4 h-4" />
                       {field.label}
                     </label>
-{isEditing ? (
-  <input
-    type={field.type}
-    name={field.name}
-    value={formData[field.name as keyof typeof formData] ?? ""}
-    onChange={handleInputChange}
-    readOnly={field.name === "role"}
-    className="w-full px-4 py-3 bg-black/40 border border-purple-700/50 rounded-lg text-white placeholder-purple-400/50 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/30 transition-all"
-  />
-) : (
-  <div className="px-4 py-3 bg-black/40 border border-purple-700/30 rounded-lg text-white/80">
-    {(formData[field.name as keyof typeof formData] ?? "") === ""
-      ? "—"
-      : formData[field.name as keyof typeof formData]}
-  </div>
-)}
 
-
+                    {isEditing ? (
+                      <input
+                        type="text"
+                        name={field.name}
+                        value={value}
+                        onChange={handleChange}
+                        className="w-full px-4 py-3 bg-black/40 border border-purple-700/50 rounded-lg"
+                      />
+                    ) : (
+                      <div className="w-full px-4 py-3 bg-black/30 border border-purple-700/30 rounded-lg text-white/80">
+                        {value || "—"}
+                      </div>
+                    )}
                   </div>
                 );
               })}
             </div>
+
+            {/* Bio */}
+            <div className="space-y-2">
+              <label className="flex items-center gap-2 text-sm font-semibold text-purple-300">
+                <FileText className="w-4 h-4" />
+                Bio
+              </label>
+
+              {isEditing ? (
+                <textarea
+                  name="bio"
+                  value={formData.bio}
+                  onChange={handleChange}
+                  rows={4}
+                  className="w-full px-4 py-3 bg-black/40 border border-purple-700/50 rounded-lg resize-none"
+                />
+              ) : (
+                <div className="px-4 py-3 bg-black/30 border border-purple-700/30 rounded-lg text-white/80">
+                  {formData.bio || "—"}
+                </div>
+              )}
+            </div>
+          </section>
+        )}
+
+        {/* SAVE BUTTONS */}
+        {isEditing && (
+          <div className="flex gap-4">
+            <button
+              onClick={handleSave}
+              disabled={isSaving}
+              className="flex-1 py-3 bg-purple-600 hover:bg-purple-500 rounded-lg font-semibold shadow-lg shadow-purple-700/30 transition"
+            >
+              {isSaving ? "Saving..." : "Save Changes"}
+            </button>
+
+            <button
+              onClick={() => setIsEditing(false)}
+              disabled={isSaving}
+              className="flex-1 py-3 bg-purple-900/40 hover:bg-purple-900/60 border border-purple-700/40 rounded-lg font-semibold transition"
+            >
+              Cancel
+            </button>
           </div>
-
-          {userType === 'ALUMNI' && (
-            <div className="bg-gradient-to-br from-purple-900/30 to-black border border-purple-800/40 rounded-2xl p-8 shadow-xl shadow-purple-900/10">
-              <h3 className="text-2xl font-bold text-white mb-8">Professional Information</h3>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                {socialFields.map((field) => {
-                  const IconComponent = field.icon;
-                  return (
-                    <div key={field.name} className="space-y-2">
-                      <label className="flex items-center gap-2 text-sm font-semibold text-purple-300 uppercase tracking-wider">
-                        <IconComponent className="w-4 h-4" />
-                        {field.label}
-                      </label>
-                      {isEditing ? (
-  <input
-    type={field.type}
-    name={field.name}
-    value={formData[field.name as keyof typeof formData] ?? ""}
-    onChange={handleInputChange}
-    readOnly={field.name === "role"}
-    className="w-full px-4 py-3 bg-black/40 border border-purple-700/50 rounded-lg text-white placeholder-purple-400/50 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/30 transition-all"
-  />
-) : (
-  <div className="px-4 py-3 bg-black/40 border border-purple-700/30 rounded-lg text-white/80">
-    {(formData[field.name as keyof typeof formData] ?? "") === ""
-      ? "—"
-      : formData[field.name as keyof typeof formData]}
-  </div>
-)}
-                    </div>
-                  );
-                })}
-              </div>
-
-              {/* Bio Section */}
-              <div className="space-y-2">
-                <label className="flex items-center gap-2 text-sm font-semibold text-purple-300 uppercase tracking-wider">
-                  <FileText className="w-4 h-4" />
-                  Bio
-                </label>
-                {isEditing ? (
-                  <textarea
-                    name="bio"
-                    value={formData.bio}
-                    onChange={handleInputChange}
-                    rows={4}
-                    className="w-full px-4 py-3 bg-black/40 border border-purple-700/50 rounded-lg text-white placeholder-purple-400/50 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/30 transition-all resize-none"
-                  />
-                ) : (
-                  <div className="px-4 py-3 bg-black/40 border border-purple-700/30 rounded-lg text-white/80">
-                    {formData.bio}
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
-
-          {/* Action Buttons */}
-          {isEditing && (
-            <div className="flex gap-4">
-              <button
-                onClick={handleSave}
-                disabled={isSaving}
-                className="flex-1 px-6 border-5 border-red-500 py-3 bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-500 hover:to-purple-400 rounded-lg font-semibold text-white transition-all shadow-lg shadow-purple-500/30 disabled:opacity-50"
-              >
-                {isSaving ? 'Saving...' : 'Save Changes'}
-              </button>
-              <button
-                onClick={() => setIsEditing(false)}
-                disabled={isSaving}
-                className="flex-1 px-6 py-3 bg-purple-900/40 hover:bg-purple-900/60 border border-purple-700/50 rounded-lg font-semibold text-white transition-all disabled:opacity-50"
-              >
-                Cancel
-              </button>
-            </div>
-          )}
-        </div>
+        )}
       </div>
     </main>
   );
