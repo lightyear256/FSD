@@ -25,7 +25,7 @@ export const getAllAlumni = async (req: Request, res: Response) => {
       },
     });
     const finalUsers = users
-  .filter((user) => user.role === "ALUMNI") // ✅ only alumni
+  .filter((user) => user.role === "ALUMNI") // only alumni
   .map((user) => ({
     ...user,
     role: "ALUMNI",
@@ -53,7 +53,7 @@ export const getUserById = async (req: Request, res: Response) => {
         id: String(id),
       },
       include: {
-    organisation: true, // ✅ populate the related organisation
+    organisation: true, // populate the related organisation
   },
     });
 
