@@ -6,6 +6,7 @@ import { Button } from './components/Button'
 import { useEffect } from 'react'
 import CurvedLoop from './components/circular'
 import { AlumniCarousel } from './components/notable'
+import Footer from './components/Footer'
 
 export default function Home() {
   const { isAuthenticated, role } = useAuth()
@@ -90,6 +91,7 @@ export default function Home() {
           <AlumniCarousel />
         </div>
       </section>
+        <Footer />
     </div>
   )
 }
