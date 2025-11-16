@@ -511,7 +511,6 @@ const MagicBento: React.FC<BentoProps> = ({
       description: 'Track user behavior',
       label: 'Insights'
     },
-    // ... other default cards
   ];
   return (
     <>

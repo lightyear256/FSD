@@ -48,12 +48,10 @@ interface ProfileCardProps {
   handle?: string;
   status?: string;
   showUserInfo?: boolean;
-  // Social links props
   linkedinUrl?: string;
   githubUrl?: string;
   onLinkedinClick?: () => void;
   onGithubClick?: () => void;
-  // Legacy contact props
   contactText?: string;
   onContactClick?: () => void;
 }
@@ -73,12 +71,10 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
   handle = "javicodes",
   status = "Online",
   showUserInfo = true,
-  // Social links props
   linkedinUrl,
   githubUrl,
   onLinkedinClick,
   onGithubClick,
-  // Legacy contact props
   contactText = "Contact",
   onContactClick,
 }) => {
@@ -287,7 +283,6 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
     onContactClick?.();
   }, [onContactClick]);
 
-  // Determine if we should show social buttons or legacy contact button
   const showSocialButtons = linkedinUrl || githubUrl || onLinkedinClick || onGithubClick;
 
   return (
@@ -314,25 +309,13 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
             {showUserInfo && (
               <div className="pc-user-info">
                 <div className="pc-user-details">
-                  {/* <div className="pc-mini-avatar">
-                    <img
-                      src={miniAvatarUrl || avatarUrl}
-                      alt={`${name || "User"} mini avatar`}
-                      loading="lazy"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.style.opacity = "0.5";
-                        target.src = avatarUrl || "";
-                      }}
-                    />
-                  </div> */}
+                  
                   <div className="pc-user-text">
                     <div className="pc-handle">{handle}</div>
                     <div className="pc-status">{status}</div>
                   </div>
                 </div>
                 
-                {/* Social buttons or legacy contact button */}
                 {showSocialButtons ? (
                   <div className="pc-social-buttons">
                     {(linkedinUrl || onLinkedinClick) && (

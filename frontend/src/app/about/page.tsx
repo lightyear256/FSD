@@ -15,7 +15,6 @@ export default function AboutPage() {
   return (
     <div className="min-h-screen bg-black text-white pt-24 pb-20 mt-10">
       
-      {/* Intro Section */}
       <section className="max-w-5xl mx-auto px-6 text-center mb-20">
         <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
           About the <span className="text-blue-400">Alumni Network</span>
@@ -27,7 +26,6 @@ export default function AboutPage() {
         </p>
       </section>
 
-      {/* Mission Section */}
       <section className="max-w-5xl mx-auto px-6 mb-20">
         <div className="bg-[#0f0f0f] border border-gray-800 rounded-2xl p-8 md:p-10 text-center">
           <h2 className="text-2xl md:text-3xl font-semibold mb-4">
@@ -41,7 +39,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Features Section */}
       <section className="max-w-6xl mx-auto px-6 mb-20">
         <h2 className="text-2xl md:text-3xl font-semibold text-center mb-12">
           What This App Helps You Do
