@@ -4,7 +4,6 @@ import React from "react";
 import ProfileCard from "../components/ProfileCard";
 import { motion } from "framer-motion";
 
-// Container fade + stagger
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -16,7 +15,6 @@ const containerVariants = {
   },
 };
 
-// MOTION-DOM SAFE letter animation (no nested transitions)
 const letterVariants = {
   hidden: { opacity: 0, y: 25, rotateX: -70 },
   visible: {
@@ -24,7 +22,7 @@ const letterVariants = {
     y: 0,
     rotateX: 0,
     transition: {
-      duration: 0.4, // flat duration is required by motion-dom
+      duration: 0.4, 
     },
   },
 };
@@ -33,7 +31,6 @@ function Creators() {
   return (
     <div className="relative overflow-hidden py-16 bg-black min-h-screen mt-20">
 
-      {/* Soft glowing background circles */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-20 left-1/4 w-56 h-56 bg-gray-800/20 rounded-full blur-3xl"></div>
         <div className="absolute bottom-24 right-1/3 w-72 h-72 bg-gray-700/20 rounded-full blur-3xl"></div>
@@ -41,7 +38,6 @@ function Creators() {
 
       <div className="relative z-10 container mx-auto px-6">
 
-        {/* Title Animation */}
         <div className="text-center mb-16">
           <motion.div
             variants={containerVariants}
@@ -73,7 +69,6 @@ function Creators() {
           </motion.div>
         </div>
 
-        {/* Creator Cards */}
         <div className="flex flex-wrap justify-center items-center gap-10">
 
           <ProfileCard

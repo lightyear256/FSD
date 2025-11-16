@@ -33,11 +33,7 @@ function Footer() {
                 Notable Alumni
               </a>
             </li>
-            {/* <li>
-              <a href="#" className="hover:text-blue-400 transition">
-                Support
-              </a>
-            </li> */}
+            
           </ul>
         </div>
 
